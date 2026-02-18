@@ -1,13 +1,18 @@
 import { colors } from "../styles";
 
-const STEP_LABELS = ["Consent", "Survey", "Learning", "Practice", "Transition", "Test Puzzle", "Debrief"];
+const STEP_LABELS = ["Consent", "Survey", "Learning", "Transition", "Test Puzzle", "Debrief"];
 
 export default function Layout({ currentStep, children }) {
   const totalSteps = STEP_LABELS.length;
-  const progressPct = ((currentStep) / (totalSteps - 1)) * 100;
+  const progressPct = (currentStep / (totalSteps - 1)) * 100;
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: colors.background, fontFamily: "system-ui, sans-serif" }}>
+<div style={{ 
+  minHeight: "100vh", 
+  width: "100%",
+  backgroundColor: colors.background, 
+  fontFamily: "system-ui, sans-serif" 
+}}>
       {/* Header */}
       <div style={{
         backgroundColor: "#fff",
@@ -40,7 +45,13 @@ export default function Layout({ currentStep, children }) {
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: 640, margin: "0 auto", padding: "48px 24px 80px" }}>
+	<div style={{ 
+	  maxWidth: 960, 
+	  margin: "0 auto", 
+	  padding: "48px 48px 80px",
+	  width: "100%",
+	  boxSizing: "border-box"
+	}}>
         {children}
       </div>
     </div>

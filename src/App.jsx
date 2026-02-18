@@ -2,14 +2,12 @@ import { useState } from "react";
 import Consent from "./steps/Consent";
 import Survey from "./steps/Survey";
 import Learning from "./steps/Learning";
-import Puzzle1 from "./steps/Puzzle1";
 import Transition from "./steps/Transition";
 import Puzzle2 from "./steps/Puzzle2";
 import Debrief from "./steps/Debrief";
 
-const STEPS = ["CONSENT", "SURVEY", "LEARNING", "PUZZLE_1", "TRANSITION", "PUZZLE_2", "DEBRIEF"];
-const GROUPSS = ["control", "video", "ai"];
-const GROUPS = [ "ai"];
+const STEPS = ["CONSENT", "SURVEY", "LEARNING", "TRANSITION", "PUZZLE_2", "DEBRIEF"];
+const GROUPS = ["control", "video", "ai"];
 
 function randomGroup() {
   return GROUPS[Math.floor(Math.random() * GROUPS.length)];
@@ -50,7 +48,6 @@ export default function App() {
     CONSENT: <Consent {...props} />,
     SURVEY: <Survey {...props} />,
     LEARNING: <Learning {...props} />,
-    PUZZLE_1: <Puzzle1 {...props} />,
     TRANSITION: <Transition {...props} />,
     PUZZLE_2: <Puzzle2 {...props} />,
     DEBRIEF: <Debrief {...props} />,
