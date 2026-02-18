@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import Consent from "./steps/Consent";
+import Survey from "./steps/Survey";
+import Learning from "./steps/Learning";
+import Puzzle1 from "./steps/Puzzle1";
+import Transition from "./steps/Transition";
+import Puzzle2 from "./steps/Puzzle2";
+import Debrief from "./steps/Debrief";
 
-function App() {
-  const [count, setCount] = useState(0)
+const STEPS = ["CONSENT", "SURVEY", "LEARNING", "PUZZLE_1", "TRANSITION", "PUZZLE_2", "DEBRIEF"];
+const GROUPS = ["control", "video", "ai"];
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+function randomGroup() {
+  return GROUPS[Math.floor(Math.random() * GROUPS.length)];
 }
 
-export default App
+export default function App() {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [group] = useState(randomGroup);
+  const [participantId] = useState(() => crypto.randomUUID());
+  const [surveyData, setSurveyData] = useState({});
+  const [puzzle2Data, setPuzzle2Data] = useState({});
+  const [feedbackData, setFeedbackData] = useState({});
+
+  function nextStep() {
+    setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
+  }
+
+  function updateSurvey(data) {
+    setSurveyData((prev) => ({ ...prev, ...data }));
+  }
+
+  function updatePuzzle2(data) {
+    setPuzzle2Data((prev) => ({ ...prev, ...data }));
+  }
+
+  function updateFeedback(data) {
+    setFeedbackData((prev) => ({ ...prev, ...data }));
+  }
+
+  const props = {
+    nextStep, group, participantId, currentStep,
+    surveyData, updateSurvey,
+    puzzle2Data, updatePuzzle2,
+    feedbackData, updateFeedback,
+  };
+
+  const steps = {
+    CONSENT: <Consent {...props} />,
+    SURVEY: <Survey {...props} />,
+    LEARNING: <Learning {...props} />,
+    PUZZLE_1: <Puzzle1 {...props} />,
+    TRANSITION: <Transition {...props} />,
+    PUZZLE_2: <Puzzle2 {...props} />,
+    DEBRIEF: <Debrief {...props} />,
+  };
+
+  return <div>{steps[STEPS[currentStep]]}</div>;
+}

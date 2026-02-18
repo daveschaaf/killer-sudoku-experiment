@@ -35,6 +35,13 @@ h1 {
   line-height: 1.1;
 }
 
+h1, h2, h3 {
+  color: #1a1a1a;
+}
+label {
+  color: #1a1a1a;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -52,6 +59,9 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+textarea {
+  color: #1a1a1a;
 }
 
 @media (prefers-color-scheme: light) {
