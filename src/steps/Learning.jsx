@@ -143,7 +143,7 @@ function AITutor({ nextStep }) {
         <div style={{
           border: `1px solid ${colors.border}`,
           borderRadius: 10,
-          height: 360,
+          height: 520,
           overflowY: "auto",
           padding: 16,
           backgroundColor: "#fff",
