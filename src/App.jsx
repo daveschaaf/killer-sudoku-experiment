@@ -8,7 +8,8 @@ import Puzzle2 from "./steps/Puzzle2";
 import Debrief from "./steps/Debrief";
 
 const STEPS = ["CONSENT", "SURVEY", "LEARNING", "PUZZLE_1", "TRANSITION", "PUZZLE_2", "DEBRIEF"];
-const GROUPS = ["control", "video", "ai"];
+const GROUPSS = ["control", "video", "ai"];
+const GROUPS = [ "ai"];
 
 function randomGroup() {
   return GROUPS[Math.floor(Math.random() * GROUPS.length)];
