@@ -1,5 +1,6 @@
 import KillerSudokuGrid from "./components/KillerSudokuGrid";
 import puzzle2 from "./puzzles/puzzle2.json";
+import puzzle1 from "./puzzles/puzzle1.json";
 
 export default function SudokuTest() {
   return (
