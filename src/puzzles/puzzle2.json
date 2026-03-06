@@ -1,0 +1,231 @@
+{
+  "size": 6,
+  "title": "Try Killer Sudoku",
+  "author": "MIDS 241",
+  "ruleset": "Fill each cell with a number from 1 to 6.\n\nEach row, column, and 2×3 box must contain each number exactly once.\n\nCells grouped in a cage must sum to the number in the cage’s top-left corner.\n\nNo number may repeat within a cage, even if the row/column allows it.",
+  "grid": [
+    [
+      {
+        "value": 1
+      },
+      {
+        "value": 6
+      },
+      {
+        "value": 5
+      },
+      {
+        "value": 2
+      },
+      {
+        "value": 4
+      },
+      {
+        "value": 3
+      }
+    ],
+    [
+      {
+        "value": 4
+      },
+      {
+        "value": 3
+      },
+      {
+        "value": 2
+      },
+      {
+        "value": 6
+      },
+      {
+        "value": 1
+      },
+      {
+        "value": 5
+      }
+    ],
+    [
+      {
+        "value": 2
+      },
+      {
+        "value": 5
+      },
+      {
+        "value": 6
+      },
+      {
+        "value": 1
+      },
+      {
+        "value": 3
+      },
+      {
+        "value": 4
+      }
+    ],
+    [
+      {
+        "value": 3
+      },
+      {
+        "value": 1
+      },
+      {
+        "value": 4
+      },
+      {
+        "value": 5
+      },
+      {
+        "value": 2
+      },
+      {
+        "value": 6
+      }
+    ],
+    [
+      {
+        "value": 5
+      },
+      {
+        "value": 2
+      },
+      {
+        "value": 3
+      },
+      {
+        "value": 4
+      },
+      {
+        "value": 6
+      },
+      {
+        "value": 1
+      }
+    ],
+    [
+      {
+        "value": 6
+      },
+      {
+        "value": 4
+      },
+      {
+        "value": 1
+      },
+      {
+        "value": 3
+      },
+      {
+        "value": 5
+      },
+      {
+        "value": 2
+      }
+    ]
+  ],
+  "killercage": [
+    {
+      "cells": [
+        "R1C1",
+        "R1C2",
+        "R2C1"
+      ],
+      "value": "11"
+    },
+    {
+      "cells": [
+        "R3C1"
+      ],
+      "value": "2"
+    },
+    {
+      "cells": [
+        "R5C5",
+        "R5C6",
+        "R6C5",
+        "R6C6"
+      ],
+      "value": "14"
+    },
+    {
+      "cells": [
+        "R3C5",
+        "R3C6",
+        "R4C6"
+      ],
+      "value": "13"
+    },
+    {
+      "cells": [
+        "R1C6",
+        "R2C6"
+      ],
+      "value": "8"
+    },
+    {
+      "cells": [
+        "R1C3",
+        "R1C4",
+        "R1C5"
+      ],
+      "value": "11"
+    },
+    {
+      "cells": [
+        "R2C4",
+        "R2C5"
+      ],
+      "value": "7"
+    },
+    {
+      "cells": [
+        "R2C2",
+        "R3C2"
+      ],
+      "value": "8"
+    },
+    {
+      "cells": [
+        "R2C3",
+        "R3C3"
+      ],
+      "value": "8"
+    },
+    {
+      "cells": [
+        "R3C4",
+        "R4C4",
+        "R4C5",
+        "R5C4"
+      ],
+      "value": "12"
+    },
+    {
+      "cells": [
+        "R4C3",
+        "R5C3"
+      ],
+      "value": "7"
+    },
+    {
+      "cells": [
+        "R4C1",
+        "R4C2",
+        "R5C1",
+        "R5C2"
+      ],
+      "value": "11"
+    },
+    {
+      "cells": [
+        "R6C1",
+        "R6C2",
+        "R6C3",
+        "R6C4"
+      ],
+      "value": "14"
+    }
+  ]
+}
