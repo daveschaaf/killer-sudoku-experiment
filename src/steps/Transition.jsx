@@ -2,10 +2,10 @@ import { initParticipant } from "../sheets";
 import Layout from "../components/Layout";
 import { btn, colors } from "../styles";
 
-export default function Transition({ nextStep, participantId, group, surveyData, currentStep }) {
+export default function Transition({ nextStep, participantId, group, surveyData, puzzle1Actions, puzzle1ElapsedSeconds, currentStep }) {
   async function handleNext() {
     try {
-      await initParticipant({ participantId, group, surveyData });
+      await initParticipant({ participantId, group, surveyData, puzzle1Actions, puzzle1ElapsedSeconds });
     } catch (err) {
       console.error("Failed to log participant init:", err);
     }

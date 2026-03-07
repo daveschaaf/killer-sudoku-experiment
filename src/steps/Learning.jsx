@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import Layout from "../components/Layout";
+import KillerSudokuGrid from "../components/KillerSudokuGrid";
 import { btn, colors } from "../styles";
 import ReactMarkdown from "react-markdown";
-
-const PRACTICE_PUZZLE_URL = "https://sudokupad.app/fpuzN4IgzglgXgpiBcA2ANCALhNAbO8QBkYBDAJwDsACAaQixxIoGUBXAEwHsBrZkVI5tAAt2JBCACyASQAijCgCYALAEZeIEsxxgYaMQDFaWCsQDGgiiZh0KAd0zmiFMswC2AIxgMAZiXYuKyhRo7BSIAHQAOmRRAKJEZhS+NsgW7FiuZClEZKwKAOsAzBRu7AAeFC7MYGipZGhEEJSm5s7unsal8dgAnhTsZJaR0WQAwlZYYBQA5r7MAA4wuY0UjiZEUzAVVTVgrkEhQputHgzLhxbrMICYBJPBcwC0OF41JiJknkNRAHIhx+0uRF6JBgCyINTsQmWq0uKRgADcYJQIF4goJNkkAPSvdIuShEOjsGyTTBhNQzCCsBAAbSpoDh+OYuAArABfZB0hm4RSoKYQBFkBBoDQwNkc9K4ZSikD08UIFAgXn8wXCqUyxkIAo8vmI5WM1WchDyLVK+BCvUAXWQtOlBqQ+tl8Hk9vV8E1Cu1AtNKvZNodimdzIDCEllutatwBSD8FZPvDCH9sdtksTDqdKZdiBZobFLrTOYlUcz6cDxfjUbdip1XotVvzZdLdobRvdJrNIobkYbybr0aztd9Lu7A4jxqrbajMZ7eeHcqj/vNlpAnEMnjWG2poEsdDA1JAACVlCNVKg9/Ij2o9wVz4u43hlIoQFKtxNdweRvIL4eCiAb7aQEzHx9Z8d3gKl9zPD8TyvSD9yvb8T0Ud8f1QW8QGUD8n3GECwL3RDj33JlrxQv9EEAzcsNfQiYL3RBzxPWiP1/B00IABjIkBgMokZ4P3WjvyYl0QAAdnYzjQP3RCeNwkYHwE3A0NUTDty4h96Jk5CZzwAClJfcS90IgC1IAuSxBEnTsIIkZSLU0iTLwABOUSKL0w9DP3Q9bOI5jtKA5ycLPNzTysjTUNI8zXyvQKr08zSQAADic5S9MQwLEJi1CzN8pKcMPVTwO4i8zzyy91LstCHyzFkgA";
+import puzzle1 from "../puzzles/puzzle1.json";
 
 const RULES = [
   "Fill each cell with a number from 1 to 6.",
@@ -23,53 +23,44 @@ function Rules() {
   );
 }
 
-function PracticeButton() {
-  return (
-    <div style={{ marginBottom: 32 }}>
-      <h2 style={{ marginTop: 0 }}>Practice Puzzle</h2>
-      <p style={{ color: colors.textSecondary, lineHeight: 1.7 }}>
-        Now it's time to try a Killer Sudoku puzzle. This is a practice round — there's no time
-        pressure and no right or wrong outcome. Use it to get familiar with the rules.
-      </p>
-      <p style={{ color: colors.textSecondary, lineHeight: 1.7 }}>
-        Click the button below to open the puzzle in a new tab. When you're done exploring,
-        come back here and click <strong>"I'm done"</strong> to continue.
-      </p>
-      <button onClick={() => window.open(PRACTICE_PUZZLE_URL, "_blank")} style={btn.primary}>
-        Open Practice Puzzle
-      </button>
-    </div>
-  );
-}
-
 function DoneSection({ nextStep }) {
   return (
-    <div style={{ borderTop: `1px solid ${colors.border}`, paddingTop: 32, marginTop: 32 }}>
-      <p style={{ color: colors.textSecondary, lineHeight: 1.7, marginBottom: 16 }}>
-        When you're ready to proceed to the next step, click <strong>I'm done</strong>.
-      </p>
-      <button onClick={nextStep} style={{ ...btn.primary, backgroundColor: "#1a1a1a" }}>
-        I'm done
+    <div style={{ borderTop: `1px solid ${colors.border}`, paddingTop: 32, marginTop: 32, display: "flex", justifyContent: "flex-end" }}>
+      <button onClick={nextStep} style={btn.primary}>
+        I'm Done →
       </button>
     </div>
   );
 }
 
-function Control({ nextStep }) {
+function Control({ onDone }) {
+  const [actions, setActions] = useState(0);
+  const gridRef = useRef(null);
   return (
     <>
       <Rules />
-      <PracticeButton />
-      <DoneSection nextStep={nextStep} />
+      <div style={{ marginBottom: 32 }}>
+        <h2 style={{ marginTop: 0 }}>Practice Puzzle</h2>
+        <p style={{ color: colors.textSecondary, lineHeight: 1.7, marginBottom: 20 }}>
+          Try solving this practice puzzle to get familiar with the rules. There's no time pressure
+          and no right or wrong outcome — just explore. Click a cell to select it, then use the
+          numpad or your keyboard to enter a number.
+        </p>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <KillerSudokuGrid ref={gridRef} puzzle={puzzle1} showTimer={false} showGiveUp={false} onAction={() => setActions((n) => n + 1)} />
+        </div>
+      </div>
+      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0)} />
     </>
   );
 }
 
-function Video({ nextStep }) {
+function Video({ onDone }) {
+  const [actions, setActions] = useState(0);
+  const gridRef = useRef(null);
   return (
     <>
       <Rules />
-      <PracticeButton />
       <div style={{ marginBottom: 32 }}>
         <h2 style={{ marginTop: 0 }}>Tutorial Video</h2>
         <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, borderRadius: 10, overflow: "hidden" }}>
@@ -82,16 +73,29 @@ function Video({ nextStep }) {
           />
         </div>
       </div>
-      <DoneSection nextStep={nextStep} />
+      <div style={{ marginBottom: 32 }}>
+        <h2 style={{ marginTop: 0 }}>Practice Puzzle</h2>
+        <p style={{ color: colors.textSecondary, lineHeight: 1.7, marginBottom: 20 }}>
+          Try solving this practice puzzle to get familiar with the rules. There's no time pressure
+          and no right or wrong outcome — just explore. Click a cell to select it, then use the
+          numpad or your keyboard to enter a number.
+        </p>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <KillerSudokuGrid ref={gridRef} puzzle={puzzle1} showTimer={false} showGiveUp={false} onAction={() => setActions((n) => n + 1)} />
+        </div>
+      </div>
+      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0)} />
     </>
   );
 }
 
-function AITutor({ nextStep }) {
+function AITutor({ onDone }) {
+  const [actions, setActions] = useState(0);
+  const gridRef = useRef(null);
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Hi! I'm your Killer Sudoku tutor. I'm here to help you learn the rules and tricks of Killer Sudoku. Open up the practice puzzle in a new tab, and I'm here to help!",
+      content: "Hi! I'm your Killer Sudoku tutor. I'm here to help you learn the rules and tricks of Killer Sudoku. Try the practice puzzle above, and ask me anything!",
     },
   ]);
   const [input, setInput] = useState("");
@@ -134,7 +138,6 @@ function AITutor({ nextStep }) {
   return (
     <>
       <Rules />
-      <PracticeButton />
       <div style={{ marginBottom: 16 }}>
         <h2 style={{ marginTop: 0 }}>AI Tutor</h2>
         <p style={{ color: colors.textSecondary, marginBottom: 16 }}>
@@ -206,18 +209,33 @@ function AITutor({ nextStep }) {
           </button>
         </div>
       </div>
-      <DoneSection nextStep={nextStep} />
+      <div style={{ marginBottom: 32 }}>
+        <h2 style={{ marginTop: 0 }}>Practice Puzzle</h2>
+        <p style={{ color: colors.textSecondary, lineHeight: 1.7, marginBottom: 20 }}>
+          Try solving this practice puzzle to get familiar with the rules. There's no time pressure
+          and no right or wrong outcome — just explore. Click a cell to select it, then use the
+          numpad or your keyboard to enter a number.
+        </p>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <KillerSudokuGrid ref={gridRef} puzzle={puzzle1} showTimer={false} showGiveUp={false} onAction={() => setActions((n) => n + 1)} />
+        </div>
+      </div>
+      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0)} />
     </>
   );
 }
 
 export default function Learning({ nextStep, group, currentStep }) {
+  function handleDone(puzzle1Actions, puzzle1ElapsedSeconds) {
+    nextStep({ puzzle1Actions, puzzle1ElapsedSeconds });
+  }
+
   return (
     <Layout currentStep={currentStep}>
       <h1 style={{ marginTop: 0 }}>Learn Killer Sudoku</h1>
-      {group === "control" && <Control nextStep={nextStep} />}
-      {group === "video" && <Video nextStep={nextStep} />}
-      {group === "ai" && <AITutor nextStep={nextStep} />}
+      {group === "control" && <Control onDone={handleDone} />}
+      {group === "video" && <Video onDone={handleDone} />}
+      {group === "ai" && <AITutor onDone={handleDone} />}
     </Layout>
   );
 }

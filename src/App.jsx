@@ -18,10 +18,14 @@ export default function App() {
   const [group] = useState(randomGroup);
   const [participantId] = useState(() => crypto.randomUUID());
   const [surveyData, setSurveyData] = useState({});
+  const [puzzle1Actions, setPuzzle1Actions] = useState(0);
+  const [puzzle1ElapsedSeconds, setPuzzle1ElapsedSeconds] = useState(0);
   const [puzzle2Data, setPuzzle2Data] = useState({});
   const [feedbackData, setFeedbackData] = useState({});
 
-  function nextStep() {
+  function nextStep(data) {
+    if (data?.puzzle1Actions !== undefined) setPuzzle1Actions(data.puzzle1Actions);
+    if (data?.puzzle1ElapsedSeconds !== undefined) setPuzzle1ElapsedSeconds(data.puzzle1ElapsedSeconds);
     setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
   }
 
@@ -40,6 +44,7 @@ export default function App() {
   const props = {
     nextStep, group, participantId, currentStep,
     surveyData, updateSurvey,
+    puzzle1Actions, puzzle1ElapsedSeconds,
     puzzle2Data, updatePuzzle2,
     feedbackData, updateFeedback,
   };

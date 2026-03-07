@@ -7,10 +7,7 @@ export default function Consent({ nextStep, currentStep }) {
 
   return (
     <Layout currentStep={currentStep}>
-	<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Berkeley_School_of_Information_logo.svg/1920px-Berkeley_School_of_Information_logo.svg.png" alt="UC Berkeley" style={{ width: 240, height: "auto", marginBottom: 16 }} /><iframe
-  src="https://f-puzzles.com"
-  style={{ width: "100%", height: 600, border: "none" }}
-/>
+	<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Berkeley_School_of_Information_logo.svg/1920px-Berkeley_School_of_Information_logo.svg.png" alt="UC Berkeley" style={{ width: 240, height: "auto", marginBottom: 16 }} />
       <h1 style={{ marginTop: 0 }}>Welcome</h1>
       <p style={{ color: colors.textSecondary, lineHeight: 1.7 }}>
         Thank you for participating in this study. You will be introduced to a new type of puzzle

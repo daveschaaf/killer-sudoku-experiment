@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 
 const CELL_SIZE = 64;
 const GRID_SIZE = 6;
@@ -124,7 +124,8 @@ function CageOverlay({ cages }) {
   );
 }
 
-export default function KillerSudokuGrid({ puzzle, onComplete, onGiveUp }) {
+const KillerSudokuGrid = forwardRef(function KillerSudokuGrid({ puzzle, onComplete, onGiveUp, onAction, showTimer = true, showGiveUp = true }, ref) {
+  const fire = () => { if (onAction) onAction(); };
   const [grid, setGrid] = useState(() =>
     puzzle.grid.map((row) =>
       row.map((cell) => ({
@@ -154,6 +155,10 @@ export default function KillerSudokuGrid({ puzzle, onComplete, onGiveUp }) {
     containerRef.current?.focus();
   }, []);
 
+  useImperativeHandle(ref, () => ({
+    getElapsed: () => Math.floor((Date.now() - startTime.current) / 1000),
+  }));
+
   function formatTime(s) {
     const m = Math.floor(s / 60);
     const sec = s % 60;
@@ -162,6 +167,7 @@ export default function KillerSudokuGrid({ puzzle, onComplete, onGiveUp }) {
 
   function fillCell(row, col, val) {
     if (!grid[row] || grid[row][col].given || completed) return;
+    fire();
     const next = grid.map((r) => r.map((c) => ({ ...c, notes: new Set(c.notes) })));
     if (noteMode && val !== "") {
       const notes = next[row][col].notes;
@@ -187,7 +193,7 @@ export default function KillerSudokuGrid({ puzzle, onComplete, onGiveUp }) {
     if (e.key === "ArrowDown")  { e.preventDefault(); setSelectedCell({ row: Math.min(GRID_SIZE - 1, row + 1), col }); return; }
     if (e.key === "ArrowLeft")  { e.preventDefault(); setSelectedCell({ row, col: Math.max(0, col - 1) }); return; }
     if (e.key === "ArrowRight") { e.preventDefault(); setSelectedCell({ row, col: Math.min(GRID_SIZE - 1, col + 1) }); return; }
-    if (e.key === "Backspace" || e.key === "Delete") { fillCell(row, col, ""); return; }
+    if (e.key === "Backspace" || e.key === "Delete") { fire(); fillCell(row, col, ""); return; }
     if (/^[1-6]$/.test(e.key)) { fillCell(row, col, e.key); return; }
   }
 
@@ -211,15 +217,17 @@ export default function KillerSudokuGrid({ puzzle, onComplete, onGiveUp }) {
       style={{ outline: "none", display: "inline-block" }}
     >
       {/* Timer */}
-      <div style={{ marginBottom: 12 }}>
-        <span style={{ fontSize: 20, fontWeight: 700, color: "#1a1a1a", fontFamily: "system-ui, sans-serif" }}>
-          ⏱ {formatTime(elapsedSeconds)}
-        </span>
-      </div>
+      {showTimer && (
+        <div style={{ marginBottom: 12 }}>
+          <span style={{ fontSize: 20, fontWeight: 700, color: "#1a1a1a", fontFamily: "system-ui, sans-serif" }}>
+            ⏱ {formatTime(elapsedSeconds)}
+          </span>
+        </div>
+      )}
 
       {completed && (
         <div style={{ marginBottom: 16, padding: "12px 16px", backgroundColor: "#dcfce7", borderRadius: 8, fontWeight: 600, color: "#166534", fontFamily: "system-ui, sans-serif" }}>
-          🎉 Puzzle complete! Time: {formatTime(elapsedSeconds)}
+          🎉 Puzzle complete!{showTimer ? ` Time: ${formatTime(elapsedSeconds)}` : ""}
         </div>
       )}
 
@@ -248,7 +256,7 @@ export default function KillerSudokuGrid({ puzzle, onComplete, onGiveUp }) {
               return (
                 <div
                   key={`${r}-${c}`}
-                  onClick={() => { setSelectedCell({ row: r, col: c }); containerRef.current?.focus(); }}
+                  onClick={() => { fire(); setSelectedCell({ row: r, col: c }); containerRef.current?.focus(); }}
                   style={{
                     width: CELL_SIZE,
                     height: CELL_SIZE,
@@ -349,7 +357,7 @@ export default function KillerSudokuGrid({ puzzle, onComplete, onGiveUp }) {
           {/* Note mode toggle */}
           <div style={{ marginTop: 10 }}>
             <button
-              onClick={() => setNoteMode((m) => !m)}
+              onClick={() => { fire(); setNoteMode((m) => !m); }}
               style={{
                 padding: "6px 18px",
                 fontSize: 13,
@@ -368,7 +376,7 @@ export default function KillerSudokuGrid({ puzzle, onComplete, onGiveUp }) {
       )}
 
       {/* Give Up */}
-      {!completed && (
+      {!completed && showGiveUp && (
         <div style={{ marginTop: 16 }}>
           {!confirmGiveUp && (
             <button
@@ -393,4 +401,6 @@ export default function KillerSudokuGrid({ puzzle, onComplete, onGiveUp }) {
       )}
     </div>
   );
-}
+});
+
+export default KillerSudokuGrid;
