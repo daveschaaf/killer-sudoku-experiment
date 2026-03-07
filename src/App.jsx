@@ -27,6 +27,7 @@ export default function App() {
     if (data?.puzzle1Actions !== undefined) setPuzzle1Actions(data.puzzle1Actions);
     if (data?.puzzle1ElapsedSeconds !== undefined) setPuzzle1ElapsedSeconds(data.puzzle1ElapsedSeconds);
     setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
+    window.scrollTo(0, 0);
   }
 
   function updateSurvey(data) {
