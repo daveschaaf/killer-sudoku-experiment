@@ -38,6 +38,60 @@ The experiment uses a 6×6 Killer Sudoku puzzle hosted on [SudokuPad](https://su
 
 Participants are recruited through UC Berkeley's SONA research participant pool and the MIDS program network. No personally identifiable information is collected. Participants are assigned an anonymous ID at the start of the session.
 
+## Puzzle Solutions
+
+### Practice Puzzle (Puzzle 1)
+
+```
+5 4 1 | 6 3 2
+6 2 3 | 4 5 1
+------+------
+3 5 4 | 1 2 6
+2 1 6 | 5 4 3
+------+------
+4 6 2 | 3 1 5
+1 3 5 | 2 6 4
+```
+
+### Test Puzzle (Puzzle 2)
+
+```
+1 6 5 | 2 4 3
+4 3 2 | 6 1 5
+------+------
+2 5 6 | 1 3 4
+3 1 4 | 5 2 6
+------+------
+5 2 3 | 4 6 1
+6 4 1 | 3 5 2
+```
+
+## Data Collection
+
+### Action Tracking
+
+Both the practice puzzle (puzzle 1) and test puzzle (puzzle 2) track an action count as a proxy for participant engagement and effort. The following interactions each increment the counter by 1:
+
+**Cell interaction**
+- Clicking any cell (including pre-filled/locked cells)
+- Pressing arrow keys to move the selection
+
+**Number input**
+- Clicking a number button on the numpad (1–6 or ✕ clear)
+- Pressing a digit key (1–6) on the keyboard
+- Pressing Backspace on the keyboard
+
+**Notes mode**
+- Clicking the ✏️ Notes ON/OFF toggle
+
+**Not counted**
+- Opening or closing the Rules Reference panel
+- Clicking Give Up or the confirm/cancel buttons
+- The timer running passively
+- Page load or initial render
+
+The action count is a rough measure of deliberate puzzle interaction, not a precise move count (e.g. clicking a locked cell or toggling notes still increments the counter).
+
 ## References
 
 - Chen et al. (2025). AI knows best? The paradox of expertise, AI-reliance, and performance in educational tutoring decision-making tasks. arXiv.

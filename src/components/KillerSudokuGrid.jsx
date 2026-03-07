@@ -377,7 +377,7 @@ const KillerSudokuGrid = forwardRef(function KillerSudokuGrid({ puzzle, onComple
 
       {/* Give Up */}
       {!completed && showGiveUp && (
-        <div style={{ marginTop: 16 }}>
+        <div style={{ marginTop: 24, borderTop: "1px solid #e5e7eb", paddingTop: 16, display: "flex", justifyContent: "flex-end" }}>
           {!confirmGiveUp && (
             <button
               onClick={() => setConfirmGiveUp(true)}
