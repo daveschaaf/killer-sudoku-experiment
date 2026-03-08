@@ -4,7 +4,7 @@ A web-based experiment investigating whether AI-assisted learning improves perfo
 
 ## Research Overview
 
-This study was developed by students at the UC Berkeley School of Information Master of Information and Data Science progra as part of a research project on AI-assisted learning.
+This study was developed by students at the UC Berkeley School of Information as part of a research project on AI-assisted learning.
 
 ### Research Question
 
@@ -37,6 +37,20 @@ The experiment uses a 6×6 Killer Sudoku puzzle hosted on [SudokuPad](https://su
 ### Recruitment
 
 Participants are recruited through UC Berkeley's SONA research participant pool and the MIDS program network. No personally identifiable information is collected. Participants are assigned an anonymous ID at the start of the session.
+
+## Developer Notes
+
+### Session Persistence
+
+The app uses `sessionStorage` to persist participant state (step, group, participantId, and all collected data) across accidental page refreshes. A `beforeunload` warning is shown if the participant tries to leave after the consent screen.
+
+When testing locally, run the following in the browser console between test runs to clear the saved session and start fresh:
+
+```javascript
+sessionStorage.clear()
+```
+
+Without this, refreshing the page will restore you to wherever you left off in the previous test run.
 
 ## Puzzle Solutions
 
@@ -91,6 +105,20 @@ Both the practice puzzle (puzzle 1) and test puzzle (puzzle 2) track an action c
 - Page load or initial render
 
 The action count is a rough measure of deliberate puzzle interaction, not a precise move count (e.g. clicking a locked cell or toggling notes still increments the counter).
+
+## Developer Notes
+
+### Session Persistence
+
+Participant state (current step, group assignment, participantId, and all collected data) is persisted to `sessionStorage` on every state change. On page reload, the app restores from `sessionStorage` so participants are returned to where they left off. The browser will also show a native "Leave page?" warning if a participant attempts to refresh or close the tab after the consent screen.
+
+**During testing**, clear `sessionStorage` between runs to avoid restoring a previous test session:
+
+```javascript
+sessionStorage.clear()
+```
+
+Run this in the browser console before starting a new test run. The next participant will automatically get a fresh session since their participantId won't be in `sessionStorage`.
 
 ## References
 

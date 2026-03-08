@@ -7,7 +7,6 @@ export default function Consent({ nextStep, currentStep }) {
 
   return (
     <Layout currentStep={currentStep}>
-	<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Berkeley_School_of_Information_logo.svg/1920px-Berkeley_School_of_Information_logo.svg.png" alt="UC Berkeley" style={{ width: 240, height: "auto", marginBottom: 16 }} />
       <h1 style={{ marginTop: 0 }}>Welcome</h1>
       <p style={{ color: colors.textSecondary, lineHeight: 1.7 }}>
         Thank you for participating in this study. You will be introduced to a new type of puzzle
@@ -23,6 +22,9 @@ export default function Consent({ nextStep, currentStep }) {
       </p>
       <p style={{ color: colors.textSecondary, lineHeight: 1.7 }}>
         Participation is voluntary. You may stop at any time.
+      </p>
+      <p style={{ color: colors.textSecondary, lineHeight: 1.7, borderLeft: "3px solid #d1d5db", paddingLeft: 12 }}>
+        To ensure the quality of this research, please complete the study in a single sitting without interruptions. Do not refresh the page, use the browser back button, or open the study in multiple tabs.
       </p>
 
       <label style={{ display: "flex", alignItems: "flex-start", gap: 10, margin: "32px 0", cursor: "pointer" }}>
