@@ -122,6 +122,12 @@ function AITutor({ onDone, participantId }) {
   const chatContainerRef = useRef(null);
   const inputRef = useRef(null);
 
+  function scrollChat() {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }
+
   async function sendMessage() {
     if (!input.trim() || loading) return;
     const userMessage = { role: "user", content: input.trim() };
@@ -130,6 +136,7 @@ function AITutor({ onDone, participantId }) {
     setInput("");
     setLoading(true);
     inputRef.current?.blur();
+    setTimeout(scrollChat, 0);
 
     seqRef.current += 1;
     userMessageCount.current += 1;
@@ -146,6 +153,7 @@ function AITutor({ onDone, participantId }) {
       setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
       seqRef.current += 1;
       logMessage({ participantId, sequenceNumber: seqRef.current, role: "assistant", message: reply });
+      setTimeout(scrollChat, 0);
     } catch (err) {
       setMessages((prev) => [...prev, { role: "assistant", content: "Something went wrong. Please try again." }]);
     } finally {
