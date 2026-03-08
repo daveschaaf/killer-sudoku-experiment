@@ -151,10 +151,6 @@ const KillerSudokuGrid = forwardRef(function KillerSudokuGrid({ puzzle, onComple
     return () => clearInterval(interval);
   }, [completed]);
 
-  useEffect(() => {
-    containerRef.current?.focus();
-  }, []);
-
   useImperativeHandle(ref, () => ({
     getElapsed: () => Math.floor((Date.now() - startTime.current) / 1000),
   }));

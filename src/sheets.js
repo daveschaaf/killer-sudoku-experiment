@@ -1,6 +1,6 @@
 const SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
 
-export async function initParticipant({ participantId, group, surveyData, puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches }) {
+export async function initParticipant({ participantId, group, surveyData, puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches, aiMessageCount }) {
   return fetch(SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -15,6 +15,7 @@ export async function initParticipant({ participantId, group, surveyData, puzzle
       puzzle1Actions,
       puzzle1ElapsedSeconds,
       puzzle1TabSwitches,
+      aiMessageCount,
     }),
   });
 }
@@ -39,6 +40,21 @@ export async function updateFeedback({ participantId, feedback }) {
       action: "feedback",
       participantId,
       feedback,
+    }),
+  });
+}
+
+export async function logMessage({ participantId, sequenceNumber, role, message }) {
+  return fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      action: "logMessage",
+      participantId,
+      sequenceNumber,
+      role,
+      timestamp: new Date().toISOString(),
+      message,
     }),
   });
 }

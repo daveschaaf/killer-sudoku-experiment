@@ -4,6 +4,7 @@ import KillerSudokuGrid from "../components/KillerSudokuGrid";
 import { btn, colors } from "../styles";
 import ReactMarkdown from "react-markdown";
 import puzzle1 from "../puzzles/puzzle1.json";
+import { logMessage } from "../sheets";
 
 function useTabSwitchCount() {
   const count = useRef(0);
@@ -103,10 +104,12 @@ function Video({ onDone }) {
   );
 }
 
-function AITutor({ onDone }) {
+function AITutor({ onDone, participantId }) {
   const [actions, setActions] = useState(0);
   const gridRef = useRef(null);
   const tabSwitches = useTabSwitchCount();
+  const seqRef = useRef(0);
+  const userMessageCount = useRef(0);
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -115,11 +118,9 @@ function AITutor({ onDone }) {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const bottomRef = useRef(null);
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  const chatContainerRef = useRef(null);
+  const inputRef = useRef(null);
 
   async function sendMessage() {
     if (!input.trim() || loading) return;
@@ -128,6 +129,12 @@ function AITutor({ onDone }) {
     setMessages(updatedMessages);
     setInput("");
     setLoading(true);
+    inputRef.current?.blur();
+
+    seqRef.current += 1;
+    userMessageCount.current += 1;
+    logMessage({ participantId, sequenceNumber: seqRef.current, role: "user", message: userMessage.content });
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
@@ -135,7 +142,10 @@ function AITutor({ onDone }) {
         body: JSON.stringify({ messages: updatedMessages }),
       });
       const data = await res.json();
-      setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
+      const reply = data.reply;
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+      seqRef.current += 1;
+      logMessage({ participantId, sequenceNumber: seqRef.current, role: "assistant", message: reply });
     } catch (err) {
       setMessages((prev) => [...prev, { role: "assistant", content: "Something went wrong. Please try again." }]);
     } finally {
@@ -158,7 +168,7 @@ function AITutor({ onDone }) {
         <p style={{ color: colors.textSecondary, marginBottom: 16 }}>
           Ask the tutor any questions about Killer Sudoku while you work through the practice puzzle.
         </p>
-        <div style={{
+        <div ref={chatContainerRef} style={{
           border: `1px solid ${colors.border}`,
           borderRadius: 10,
           height: 520,
@@ -196,10 +206,10 @@ function AITutor({ onDone }) {
               Thinking…
             </div>
           )}
-          <div ref={bottomRef} />
         </div>
         <div style={{ display: "flex", gap: 8 }}>
           <input
+            ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -235,14 +245,14 @@ function AITutor({ onDone }) {
           <KillerSudokuGrid ref={gridRef} puzzle={puzzle1} showTimer={false} showGiveUp={false} onAction={() => setActions((n) => n + 1)} />
         </div>
       </div>
-      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0, tabSwitches.current)} />
+      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0, tabSwitches.current, userMessageCount.current)} />
     </>
   );
 }
 
-export default function Learning({ nextStep, group, currentStep }) {
-  function handleDone(puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches) {
-    nextStep({ puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches });
+export default function Learning({ nextStep, group, currentStep, participantId }) {
+  function handleDone(puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches, aiMessageCount = 0) {
+    nextStep({ puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches, aiMessageCount });
   }
 
   return (
@@ -250,7 +260,7 @@ export default function Learning({ nextStep, group, currentStep }) {
       <h1 style={{ marginTop: 0 }}>Learn Killer Sudoku</h1>
       {group === "control" && <Control onDone={handleDone} />}
       {group === "video" && <Video onDone={handleDone} />}
-      {group === "ai" && <AITutor onDone={handleDone} />}
+      {group === "ai" && <AITutor onDone={handleDone} participantId={participantId} />}
     </Layout>
   );
 }

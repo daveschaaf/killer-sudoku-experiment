@@ -106,6 +106,12 @@ Both the practice puzzle (puzzle 1) and test puzzle (puzzle 2) track an action c
 
 The action count is a rough measure of deliberate puzzle interaction, not a precise move count (e.g. clicking a locked cell or toggling notes still increments the counter).
 
+### Tab Switch Tracking
+
+Both the learning phase and test puzzle track how many times the participant switched away from the browser tab (`puzzle1TabSwitches`, `puzzle2TabSwitches`). This is measured via the Page Visibility API (`visibilitychange` event) and increments each time `document.visibilityState` becomes `"hidden"`.
+
+**Limitations:** Behavior varies by browser and OS. Tab switches within the browser are reliably captured, but switching to another application (e.g. cmd+Tab) may not be detected on all platforms. Treat these counts as a lower-bound estimate of focus loss rather than a precise measure.
+
 ## Developer Notes
 
 ### Session Persistence
