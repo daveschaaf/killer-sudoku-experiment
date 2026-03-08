@@ -5,6 +5,18 @@ import { btn, colors } from "../styles";
 import ReactMarkdown from "react-markdown";
 import puzzle1 from "../puzzles/puzzle1.json";
 
+function useTabSwitchCount() {
+  const count = useRef(0);
+  useEffect(() => {
+    function handleVisibility() {
+      if (document.visibilityState === "hidden") count.current += 1;
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+  return count;
+}
+
 const RULES = [
   "Fill each cell with a number from 1 to 6.",
   "Each row, column, and 2×3 box must contain each number exactly once.",
@@ -36,6 +48,7 @@ function DoneSection({ nextStep }) {
 function Control({ onDone }) {
   const [actions, setActions] = useState(0);
   const gridRef = useRef(null);
+  const tabSwitches = useTabSwitchCount();
   return (
     <>
       <Rules />
@@ -50,7 +63,7 @@ function Control({ onDone }) {
           <KillerSudokuGrid ref={gridRef} puzzle={puzzle1} showTimer={false} showGiveUp={false} onAction={() => setActions((n) => n + 1)} />
         </div>
       </div>
-      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0)} />
+      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0, tabSwitches.current)} />
     </>
   );
 }
@@ -58,6 +71,7 @@ function Control({ onDone }) {
 function Video({ onDone }) {
   const [actions, setActions] = useState(0);
   const gridRef = useRef(null);
+  const tabSwitches = useTabSwitchCount();
   return (
     <>
       <Rules />
@@ -84,7 +98,7 @@ function Video({ onDone }) {
           <KillerSudokuGrid ref={gridRef} puzzle={puzzle1} showTimer={false} showGiveUp={false} onAction={() => setActions((n) => n + 1)} />
         </div>
       </div>
-      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0)} />
+      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0, tabSwitches.current)} />
     </>
   );
 }
@@ -92,6 +106,7 @@ function Video({ onDone }) {
 function AITutor({ onDone }) {
   const [actions, setActions] = useState(0);
   const gridRef = useRef(null);
+  const tabSwitches = useTabSwitchCount();
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -220,14 +235,14 @@ function AITutor({ onDone }) {
           <KillerSudokuGrid ref={gridRef} puzzle={puzzle1} showTimer={false} showGiveUp={false} onAction={() => setActions((n) => n + 1)} />
         </div>
       </div>
-      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0)} />
+      <DoneSection nextStep={() => onDone(actions, gridRef.current?.getElapsed() ?? 0, tabSwitches.current)} />
     </>
   );
 }
 
 export default function Learning({ nextStep, group, currentStep }) {
-  function handleDone(puzzle1Actions, puzzle1ElapsedSeconds) {
-    nextStep({ puzzle1Actions, puzzle1ElapsedSeconds });
+  function handleDone(puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches) {
+    nextStep({ puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches });
   }
 
   return (

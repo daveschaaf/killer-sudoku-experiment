@@ -1,6 +1,6 @@
 const SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL;
 
-export async function initParticipant({ participantId, group, surveyData, puzzle1Actions, puzzle1ElapsedSeconds }) {
+export async function initParticipant({ participantId, group, surveyData, puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches }) {
   return fetch(SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
@@ -14,6 +14,7 @@ export async function initParticipant({ participantId, group, surveyData, puzzle
       playedKillerSudoku: surveyData.playedKillerSudoku,
       puzzle1Actions,
       puzzle1ElapsedSeconds,
+      puzzle1TabSwitches,
     }),
   });
 }

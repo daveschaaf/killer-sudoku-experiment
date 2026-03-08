@@ -37,13 +37,14 @@ export default function App() {
   const [surveyData, setSurveyData] = useState(session?.surveyData ?? {});
   const [puzzle1Actions, setPuzzle1Actions] = useState(session?.puzzle1Actions ?? 0);
   const [puzzle1ElapsedSeconds, setPuzzle1ElapsedSeconds] = useState(session?.puzzle1ElapsedSeconds ?? 0);
+  const [puzzle1TabSwitches, setLearningTabSwitches] = useState(session?.puzzle1TabSwitches ?? 0);
   const [puzzle2Data, setPuzzle2Data] = useState(session?.puzzle2Data ?? {});
   const [feedbackData, setFeedbackData] = useState(session?.feedbackData ?? {});
 
   // Persist session to sessionStorage on every state change
   useEffect(() => {
-    saveSession({ currentStep, group, participantId, surveyData, puzzle1Actions, puzzle1ElapsedSeconds, puzzle2Data, feedbackData });
-  }, [currentStep, group, participantId, surveyData, puzzle1Actions, puzzle1ElapsedSeconds, puzzle2Data, feedbackData]);
+    saveSession({ currentStep, group, participantId, surveyData, puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches, puzzle2Data, feedbackData });
+  }, [currentStep, group, participantId, surveyData, puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches, puzzle2Data, feedbackData]);
 
   // Warn on refresh/close if past consent screen
   useEffect(() => {
@@ -60,6 +61,7 @@ export default function App() {
   function nextStep(data) {
     if (data?.puzzle1Actions !== undefined) setPuzzle1Actions(data.puzzle1Actions);
     if (data?.puzzle1ElapsedSeconds !== undefined) setPuzzle1ElapsedSeconds(data.puzzle1ElapsedSeconds);
+    if (data?.puzzle1TabSwitches !== undefined) setLearningTabSwitches(data.puzzle1TabSwitches);
     setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1));
     window.scrollTo(0, 0);
   }
@@ -79,7 +81,7 @@ export default function App() {
   const props = {
     nextStep, group, participantId, currentStep,
     surveyData, updateSurvey,
-    puzzle1Actions, puzzle1ElapsedSeconds,
+    puzzle1Actions, puzzle1ElapsedSeconds, puzzle1TabSwitches,
     puzzle2Data, updatePuzzle2,
     feedbackData, updateFeedback,
   };

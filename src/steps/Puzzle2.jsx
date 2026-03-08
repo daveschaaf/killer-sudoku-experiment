@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { updatePuzzle2 as logPuzzle2 } from "../sheets";
 import Layout from "../components/Layout";
 import KillerSudokuGrid from "../components/KillerSudokuGrid";
 import { btn, colors } from "../styles";
 import puzzle2 from "../puzzles/puzzle2.json";
+
+function useTabSwitchCount() {
+  const count = useRef(0);
+  useEffect(() => {
+    function handleVisibility() {
+      if (document.visibilityState === "hidden") count.current += 1;
+    }
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => document.removeEventListener("visibilitychange", handleVisibility);
+  }, []);
+  return count;
+}
 
 
 
@@ -39,6 +51,7 @@ function CollapsibleRules() {
 
 export default function Puzzle2({ nextStep, participantId, updatePuzzle2, currentStep }) {
   const [puzzle2Actions, setPuzzle2Actions] = useState(0);
+  const tabSwitches = useTabSwitchCount();
 
   async function handleComplete({ elapsedSeconds }) {
     const data = {
@@ -46,6 +59,7 @@ export default function Puzzle2({ nextStep, participantId, updatePuzzle2, curren
       puzzle2Correct: true,
       puzzle2ElapsedSeconds: elapsedSeconds,
       puzzle2Actions,
+      puzzle2TabSwitches: tabSwitches.current,
     };
 
     updatePuzzle2(data);
@@ -65,6 +79,7 @@ export default function Puzzle2({ nextStep, participantId, updatePuzzle2, curren
       puzzle2Correct: false,
       puzzle2ElapsedSeconds: elapsedSeconds,
       puzzle2Actions,
+      puzzle2TabSwitches: tabSwitches.current,
     };
 
     updatePuzzle2(data);
@@ -81,6 +96,10 @@ export default function Puzzle2({ nextStep, participantId, updatePuzzle2, curren
   return (
     <Layout currentStep={currentStep}>
       <h1 style={{ marginTop: 0 }}>Test Puzzle</h1>
+      <p style={{ color: colors.textSecondary, lineHeight: 1.7, marginBottom: 24 }}>
+        This is the real puzzle. Solve it on your own — no aids are available. The timer starts now.
+        When you complete it, you'll automatically move to the next step.
+      </p>
       <CollapsibleRules />
       <div style={{ display: "flex", justifyContent: "center" }}>
         <KillerSudokuGrid
